@@ -96,9 +96,8 @@ def max_tokens_based_on_input(text):
     return tone, max_tokens
 
 
-while True:
-    text = input()
-    italian_response = chatgpt(text)
+def respond_to_message(message_text: str) -> str:
+    italian_response = chatgpt(message_text)
     in_english = translate_text(italian_response,srcl="it", tgl="en-US")
     print(italian_response)
     print(in_english)
