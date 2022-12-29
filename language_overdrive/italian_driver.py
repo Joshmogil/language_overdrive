@@ -40,17 +40,19 @@ def translate_text(text: str = "YOUR_TEXT_TO_TRANSLATE", srcl: str = "en-US" , t
     for translation in response.translations:
         return(translation.translated_text)
 
-def chatgpt(text,level="beg"):
+def chatgpt(text, previous_text,level="beg"):
     
     levels={
         "beg": "in the style of a 8 year old.",
         "int": "in the style of a 14 year old.",
         "adv" : "."
     }
-    prompt=f"In italian, respond in a friendly way to: {text}. End each sentence with punctuation."
-    print(prompt)
+    tone, max_tokens = max_tokens_based_on_input(text)
+    
+    prompt=f"""Respond in a {tone} way to: {text}. End each sentence with punctuation."""
+    #print(prompt)
 
-    max_tokens = max_tokens_based_on_input(text)
+    
     response = openai.Completion.create(
     model="text-davinci-003",
     prompt=prompt,
@@ -67,14 +69,14 @@ def chatgpt(text,level="beg"):
 
 def max_tokens_based_on_input(text):
     #base line: shorter input = shorter response, vice versa
-    max_length = len(text)*2.5 if len(text) <40 else 125
+    max_length = len(text)*5.5 if len(text) <20 else 125
     min_length = len(text)*1.5 if len(text) <20 else 40
 
 
     #if the text is questionish then give longer responses.
     response = openai.Completion.create(
     model="text-davinci-003",
-    prompt=f"What is the tone of the following sentence: {text}",
+    prompt=f"Describe the the tone of the following sentence using one or more adjectives: {text}",
     temperature=1,
     max_tokens=40,
     top_p=1,
@@ -82,7 +84,7 @@ def max_tokens_based_on_input(text):
     presence_penalty=2
     )
     r = response["choices"][0]["text"].replace("\n","").replace("?","").lower()
-    print(r)
+    #print(r)
     #experimenting with something here don't look
     if "curious" in r or \
     "inquisitive" in r:
@@ -90,11 +92,15 @@ def max_tokens_based_on_input(text):
         min_length = min_length*3
 
     max_tokens=random.randrange(int(min_length),int(max_length))
-    return max_tokens
+    tone = r
+    return tone, max_tokens
 
-italian_response = chatgpt("I like to sing and dance.")
-in_english = translate_text(italian_response,srcl="it", tgl="en-US")
 
-print(italian_response)
-print(in_english)
+while True:
+    text = input()
+    italian_response = chatgpt(text)
+    in_english = translate_text(italian_response,srcl="it", tgl="en-US")
+    print(italian_response)
+    print(in_english)
+    
 
