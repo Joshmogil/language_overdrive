@@ -92,7 +92,7 @@ def max_tokens_based_on_input(text):
     max_tokens=random.randrange(int(min_length),int(max_length))
     return max_tokens
 
-italian_response = chatgpt("Can you tell me about rome?")
+italian_response = chatgpt("I like to sing and dance.")
 in_english = translate_text(italian_response,srcl="it", tgl="en-US")
 
 print(italian_response)
