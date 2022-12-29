@@ -5,16 +5,13 @@ import random
 import string
 from requests import Request
 import time
+from italian_driver import respond_to_message
 
 logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 logger.info("logging from the root logger") 
 
-class Message(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-    tax: float | None = None
+
 
 app = FastAPI()
 
@@ -36,6 +33,10 @@ async def log_requests(request: Request, call_next):
 async def create_item():
     return {"hello":"world"}
 
+class Message(BaseModel):
+    message: str
+    
+
 @app.post("/chat/")
-async def create_item(item: Message):
-    return item
+async def create_item(message: Message):
+    return respond_to_message(message.message)

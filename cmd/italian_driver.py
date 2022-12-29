@@ -40,7 +40,7 @@ def translate_text(text: str = "YOUR_TEXT_TO_TRANSLATE", srcl: str = "en-US" , t
     for translation in response.translations:
         return(translation.translated_text)
 
-def chatgpt(text, previous_text,level="beg"):
+def chatgpt(text,level="beg"):
     
     levels={
         "beg": "in the style of a 8 year old.",
@@ -49,7 +49,7 @@ def chatgpt(text, previous_text,level="beg"):
     }
     tone, max_tokens = max_tokens_based_on_input(text)
     
-    prompt=f"""Respond in a {tone} way to: {text}. End each sentence with punctuation."""
+    prompt=f"""In Italian, respond in a {tone} way to: {text}. End each sentence with punctuation."""
     #print(prompt)
 
     
@@ -99,7 +99,9 @@ def max_tokens_based_on_input(text):
 def respond_to_message(message_text: str) -> str:
     italian_response = chatgpt(message_text)
     in_english = translate_text(italian_response,srcl="it", tgl="en-US")
-    print(italian_response)
-    print(in_english)
-    
+    return {
+        "italian_response":italian_response,
+        "english_translation":in_english
+    }
+
 
