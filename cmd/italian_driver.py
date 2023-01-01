@@ -5,12 +5,12 @@ import random
 
 from dotenv import load_dotenv
 
-load_dotenv("./.env")
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
 # Set the path to the service account in gcp with api usage permission for Cloud Translate
 path_to_gcp_service_account = "/home/jmogil/gcp_service_accounts/language-overdrive-4fde6440ef31.json"
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= path_to_gcp_service_account
+
+load_dotenv("./.env")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Initialize Translation client
 def translate_text(text: str = "YOUR_TEXT_TO_TRANSLATE", srcl: str = "en-US" , tgl: str = "it", project_id: str = "language-overdrive"):
